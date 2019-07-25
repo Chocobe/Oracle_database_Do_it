@@ -162,3 +162,53 @@ SELECT *
 SELECT *
     FROM EMP
     WHERE SAL * 12 = 36000;
+    
+    
+-- EMP 테이블에서 급여가 3000 이상인 직원정보를 출력하기
+SELECT *
+    FROM EMP
+    WHERE SAL >= 3000;
+    
+    
+-- EMP 테이블에서 급여가 2500 이상이고 업무가 ANALYST인 직원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE SAL >= 2500 AND JOB = 'ANALYST';
+    
+    
+-- 사원이름의 첫 문자가 F와 같거나 뒤쪽인 것만 출력하기
+SELECT *
+    FROM EMP
+    WHERE ENAME >= 'F';
+    
+    
+-- 사원이름이 FORZ보다 앞쪽에 있는 사원정보를 출력하기
+SELECT *
+    FROM EMP
+    WHERE ENAME <= 'FORZ';
+    
+    
+--
+-- 급여가 3000이 아닌 사원의 데이터를 출력하기 (4가지 방법)
+-- [1]
+SELECT *
+    FROM EMP
+    WHERE SAL != 3000;
+    
+
+-- [2]
+SELECT *
+    FROM EMP
+    WHERE SAL <> 3000;
+    
+    
+-- [3]
+SELECT *
+    FROM EMP
+    WHERE SAL ^= 3000;
+    
+    
+-- [4]
+SELECT *
+    FROM EMP
+    WHERE NOT SAL = 3000;
