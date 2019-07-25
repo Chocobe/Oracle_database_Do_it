@@ -38,7 +38,7 @@ SELECT ENAME, SAL, SAL * 12 + COMM, COMM
 SELECT ENAME, SAL, SAL + SAL + SAL + SAL + SAL + SAL + SAL + SAL + SAL + SAL + SAL + SAL + COMM, COMM
     FROM EMP;
 
-    
+
 --
 -- 위의 문제를 별칭(ALIAS)사용법 4가지로 출력하기
 --
@@ -212,3 +212,91 @@ SELECT *
 SELECT *
     FROM EMP
     WHERE NOT SAL = 3000;
+    
+    
+--
+--  WHERE ~ IN ~
+--
+
+-- EMP 테이블에서 직책이 MANAGER, SALESMAN, CLERK 인 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE JOB = 'MANAGER' OR JOB = 'SALESMAN' OR JOB = 'CLERK';
+
+SELECT *
+    FROM EMP
+    WHERE JOB IN('MANAGER', 'SALESMAN', 'CLERK');
+    
+    
+-- EMP 테이블에서 직책이 MANAGER, SALESMAN, CLERK가 아닌 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE JOB != 'MANAGER' AND JOB <> 'SALESMAN' AND JOB ^= 'CLERK';
+    
+SELECT *
+    FROM EMP
+    WHERE JOB NOT IN('MANAGER', 'SALESMAN', 'CLERK');
+    
+    
+-- EMP 테이블에서 IN연산자를 사용하여 부서번호가 10, 20번인 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE DEPTNO IN(10, 20);
+    
+    
+--
+-- WHERE ~ BETWEEN ~ AND ~
+--
+
+-- EMP 테이블에서 급여가 2000이상이고 3000이하인 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE SAL >= 2000 AND SAL <= 3000;
+    
+SELECT *
+    FROM EMP
+    WHERE SAL BETWEEN 2000 AND 3000;
+    
+-- EMP 테이블에서 급여가 2000원 미만이고, 3000 초과인 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE NOT SAL BETWEEN 2000 AND 3000;
+    
+    
+--
+-- LIKE 연산자
+-- "일부 문자열"이 포함된 데이터를 조회하는 방법
+--
+
+-- EMP 테이블에서 이름이 S로 시작하는 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE ENAME LIKE 'S%';
+    
+    
+-- EMP 테이블에서 이름의 두번째 글자가 L인 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE ENAME LIKE '_L%';
+    
+    
+-- EMP 테이블에서 이름에 AM이라는 단어를 포함하는 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE ENAME LIKE '%AM%';
+    
+    
+-- EMP 테이블에서 이름에 AM이라는 단어가 포함되지 않는 사원정보 출력하기
+SELECT *
+    FROM EMP
+    WHERE NOT ENAME LIKE '%AM%';
+    
+
+--
+-- IS NULL연산자
+--
+
+-- EMP 테이블에서 수당이 없는 사원정보를 출력하기
+SELECT *
+    FROM EMP
+    WHERE COMM IS NULL;
