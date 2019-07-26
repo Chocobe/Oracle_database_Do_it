@@ -55,3 +55,89 @@ SELECT *
 -- '한글'을 사용하여 LENGTH함수와 LENGTHB함수 사용하기
 SELECT LENGTH('한글'), LENGTHB('한글')
     FROM DUAL;
+    
+    
+--
+-- SUBSTR함수
+-- 문자열의 일부를 추출하는 함수
+--
+
+-- EMP 테이블에서 직책을 대상으로 첫번째 문자부터 두글자,
+-- 세번째 문자부터 두글자, 5번째 문자부터 시작한 값을 출력하기
+SELECT JOB, SUBSTR(JOB, 1, 2), SUBSTR(JOB, 3, 2), SUBSTR(JOB, 5)
+    FROM EMP;
+
+
+-- EMP 테이블에서 모든 사원이름을 세번째 글자부터 끝까지 출력하기
+SELECT SUBSTR(ENAME, 3)
+    FROM EMP;
+    
+    
+-- EMP 테이블의 JOB을 대상으로 SUBSTR 테스트하기
+SELECT JOB, SUBSTR(JOB, -LENGTH(JOB)),
+        SUBSTR(JOB, -LENGTH(JOB), 2),
+        SUBSTR(JOB, -3)
+    FROM EMP;
+    
+    
+--
+-- INSTR함수
+-- 특정 문자(문자열)의 위치값 구하기 (몇 번째인가)
+--
+SELECT INSTR('HELLO, ORACLE!', 'L') AS INSTR_1,
+        INSTR('HELLO, ORACLE!', 'L', 5) AS INSTR_2,
+        INSTR('HELLO, ORACLE!', 'L', 2, 2) AS INSTR_3
+    FROM DUAL;
+    
+    
+-- INSTR함수를 LIKE연산자와 동일한 기능으로 사용해 보기
+-- EMP 테이블에서 이름에 S가 들어가는 사원정보를 출력하기
+SELECT *
+    FROM EMP
+    WHERE INSTR(ENAME, 'S') > 0;
+    
+SELECT *
+    FROM EMP
+    WHERE ENAME LIKE '%S%';
+    
+    
+--
+-- REPLACE함수
+-- 특정 문자열을 다른 문자열로 대체하기
+--
+
+-- REPLACE 예제
+SELECT '010-1234-5678' AS REPLACE_BEFORE,
+        REPLACE('010-1234-5678', '-', ' ') AS REPLACE_1,
+        REPLACE('010-1234-5678', '-') AS REPLACE_2
+    FROM DUAL;
+    
+    
+--
+-- LPAD, RPAD
+-- 데이터의 자릿수를 정하고, 빈 공간은 지정한 문자로 대체하는 함수
+-- LPAD (Left Padding)  - 빈 공간이 좌측에 채워짐
+-- RPAD (Right Padding) - 빈 공간이 우측에 채워짐
+--
+
+-- LPAD, RPAD 예제_1)
+SELECT 'Oracle', 
+        LPAD('Oracle', 5, '#') AS LPAD_1,
+        RPAD('Oracle', 10, '*') AS RPAD_1,
+        LPAD('Oracle', 10) AS LPAD_2,
+        RPAD('Oracle', 10) AS RPAD_2
+    FROM DUAL;
+    
+
+-- LPAD, RPAD 예제_2)
+-- 주민번호, 폰번호 와 같은 개인정보의 일부만 노출 시키기
+SELECT RPAD('971225-', 14, '*'),
+        RPAD('010-1234-', 13, '*')
+    FROM DUAL;
+    
+    
+--
+-- CONCAT함수
+-- 두 문자열 데이터를 합치기
+--
+
