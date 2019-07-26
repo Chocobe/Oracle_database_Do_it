@@ -138,6 +138,45 @@ SELECT RPAD('971225-', 14, '*'),
     
 --
 -- CONCAT함수
--- 두 문자열 데이터를 합치기
+-- 두 문자열 데이터를 합치는 함수
 --
 
+-- EMP 테이블에서 '사원번호 : 사원명' 의 형식으로 출력하기
+SELECT CONCAT(EMPNO, CONCAT(' : ', ENAME)) AS "사원번호 : 사원명"
+    FROM EMP;
+    
+
+--
+-- ||연산자
+-- CONCAT과 동일한 기능(문자열 합치기)
+--
+SELECT EMPNO || ' : ' || ENAME AS "사원번호 : 사원명"
+    FROM EMP;
+    
+    
+--
+-- TRIM, LTRIM, RTRIM함수
+-- 특정 문자를 지우는 함수
+--
+
+-- 공백을 제거하는 예제)
+SELECT '[' || TRIM(' _ _ Oracle _ _ ') || ']' AS TRIM,
+        '[' || TRIM(LEADING FROM ' _ _ Oracle _ _ ') || ']' AS TRIM_LEADING,
+        '[' || TRIM(TRAILING FROM ' _ _ Oracle _ _ ') || ']' AS TRIM_TRAILING,
+        '[' || TRIM(BOTH FROM ' _ _ Oracle _ _ ') || ']' AS TRIM_BOTH
+    FROM DUAL;
+    
+-- '_'를 삭제하는 예제)
+SELECT '[' || TRIM('_' FROM '_ _ Oracle _ _') || ']' AS TRIM,
+        '[' || TRIM(LEADING '_' FROM '_ _ Oracle _ _' || ']') AS TRIM_LEADING,
+        '[' || TRIM(TRAILING '_' FROM '_ _ Oracle _ _') || ']' AS TRIM_TRAILING,
+        '[' || TRIM(BOTH '_' FROM '_ _ Oracle _ _') || ']' AS TRIM_BOTH
+    FROM DUAL;
+    
+-- TRIM, LTRIM, RTRIM 비교하기
+SELECT '[' || TRIM(' _Oracle_ ') || ']' AS TRIM,
+        '[' || LTRIM(' _Oracle_ ') || ']' AS LTRIM_1,
+        '[' || RTRIM(' _Oracle_ ') || ']' AS RTRIM_1,
+        '[' || LTRIM('<_Oracle_>', '_<') || ']' LTRIM_2,
+        '[' || RTRIM('<_Oracle_>', '>_') || ']' RTRIM_2
+    FROM DUAL;
