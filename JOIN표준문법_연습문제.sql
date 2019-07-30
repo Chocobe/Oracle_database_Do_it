@@ -1,0 +1,96 @@
+--
+-- JOIN표준문제_연습문제
+
+-- [1] 급여가 2000 초과인 사원들의
+-- 부서정보, 사원정보 를 출력하기
+SELECT DEPTNO, D.DNAME, E.EMPNO, E.ENAME, E.SAL
+    FROM DEPT D JOIN EMP E USING(DEPTNO)
+    WHERE E.SAL > 2000;
+    
+SELECT D.DEPTNO, D.DNAME, E.EMPNO, E.ENAME, E.SAL
+    FROM DEPT D JOIN EMP E
+            ON D.DEPTNO = E.DEPTNO
+    WHERE E.SAL > 2000;
+    
+SELECT D.DEPTNO, D.DNAME, E.EMPNO, E.ENAME, E.SAL
+    FROM DEPT D, EMP E
+    WHERE D.DEPTNO = E.DEPTNO AND
+            E.SAL > 2000;
+            
+            
+-- [2] 각 부서별 평균급여, 최대급여, 최소급여, 사원수 를 출력하기
+SELECT DEPTNO, D.DNAME,
+        TRUNC(AVG(E.SAL)) AS AVG_SAL,
+        MAX(E.SAL) AS MAX_SAL,
+        MIN(E.SAL) AS MIN_SAL,
+        COUNT(*) AS CNT
+    FROM DEPT D JOIN EMP E USING(DEPTNO)
+    GROUP BY DEPTNO, D.DNAME;
+    
+SELECT D.DEPTNO, D.DNAME,
+        TRUNC(AVG(E.SAL)) AS AVG_SAL,
+        MAX(E.SAL) AS MAX_SAL,
+        MIN(E.SAL) AS MIN_SAL,
+        COUNT(*) AS CNT
+    FROM DEPT D JOIN EMP E
+            ON D.DEPTNO = E.DEPTNO
+    GROUP BY D.DEPTNO, D.DNAME;
+    
+SELECT D.DEPTNO, D.DNAME,
+        TRUNC(AVG(E.SAL)) AS AVG_SAL,
+        MAX(E.SAL) AS MAX_SAL,
+        MIN(E.SAL) AS MIN_SAL,
+        COUNT(*) AS CNT
+    FROM DEPT D, EMP E
+    WHERE D.DEPTNO = E.DEPTNO
+    GROUP BY D.DEPTNO, D.DNAME;
+    
+    
+-- [3] 모든 부서정보와 사원정보를 부서번호, 사원 이름순으로
+-- 정렬하여 출력하기
+SELECT DEPTNO, D.DNAME, 
+        E.EMPNO, E.ENAME, E.JOB, E.SAL
+    FROM DEPT D LEFT OUTER JOIN EMP E USING(DEPTNO)
+    ORDER BY DEPTNO, E.ENAME;
+    
+SELECT D.DEPTNO, D.DNAME,
+        E.EMPNO, E.ENAME, E.JOB, E.SAL
+    FROM DEPT D LEFT OUTER JOIN EMP E
+            ON D.DEPTNO = E.DEPTNO
+    ORDER BY D.DEPTNO, E.ENAME;
+    
+SELECT D.DEPTNO, D.DNAME,
+        E.EMPNO, E.ENAME, E.JOB, E.SAL
+    FROM DEPT D, EMP E
+    WHERE D.DEPTNO = E.DEPTNO(+)
+    ORDER BY D.DEPTNO, E.ENAME;
+    
+    
+-- [4] 모든 부서정보, 사원정보, 급여 등급정보, 각 사원의 직속 상관정보를
+-- 부서번호, 사원번호 순서로 정렬하여 출력하기
+
+-- SQL-99표준방식
+SELECT  D.DEPTNO, D.DNAME,
+        E1.EMPNO, E1.ENAME, E1.MGR, E1.SAL, E1.DEPTNO AS DEPTNO_1,
+        S.LOSAL, S.HISAL, S.GRADE,
+        E2.EMPNO AS MGR_EMPNO,
+        E2.ENAME AS MGR_ENAME
+  FROM  DEPT D LEFT OUTER JOIN EMP E1
+                ON (D.DEPTNO = E1.DEPTNO)
+            LEFT OUTER JOIN SALGRADE S
+                ON (E1.SAL BETWEEN S.LOSAL AND S.HISAL)
+            LEFT OUTER JOIN EMP E2
+                ON (E1.MGR = E2.EMPNO)
+ORDER BY D.DEPTNO, E1.EMPNO;
+
+-- SQL-99 이전 방식
+SELECT  D.DEPTNO, D.DNAME,
+        E1.EMPNO, E1.ENAME, E1.MGR, E1.SAL, E1.DEPTNO AS DEPTNO_1,
+        S.LOSAL, S.HISAL, S.GRADE,
+        E2.EMPNO AS MGR_EMPNO,
+        E2.ENAME AS MGR_ENAME
+  FROM  DEPT D, EMP E1, SALGRADE S, EMP E2
+ WHERE  D.DEPTNO = E1.DEPTNO(+)
+   AND  E1.SAL BETWEEN S.LOSAL(+) AND S.HISAL(+)
+   AND  E1.MGR = E2.EMPNO(+)
+ORDER BY D.DEPTNO, E1.EMPNO;
