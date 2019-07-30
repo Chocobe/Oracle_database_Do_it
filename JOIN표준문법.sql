@@ -44,11 +44,50 @@ SELECT E.EMPNO, E.ENAME, E.JOB, E.MGR, E.HIREDATE, E.SAL, E.COMM,
 --
 -- 왼쪽 외부 조인     : LEFT OUTER JOIN
 -- 오른쪽 외부 조인   : RIGHT OUTER JOIN
+-- 전체 외부 조인     : FULL OUTER JOIN
 
 -- EMP 테이블에서 사원의 정보와 상사의 정보 출력하기
--- (외부 조인 사용)
+-- (LEFT OUTER JOIN 사용)
 SELECT E1.EMPNO, E1.ENAME, E1.MGR,
         E2.EMPNO AS MGR_EMPNO,
         E2.ENAME AS MGR_ENAME
     FROM EMP E1 LEFT OUTER JOIN EMP E2
         ON E1.MGR = E2.EMPNO;
+        
+-- EMP 테이블에서 사원의 정보와 상사의 정보 출력하기
+-- (RIGHT OUTER JOIN 사용)
+SELECT E1.EMPNO, E1.ENAME, E1.MGR,
+        E2.EMPNO AS MGR_EMPNO,
+        E2.ENAME AS MGR_ENAME
+    FROM EMP E1 RIGHT OUTER JOIN EMP E2
+    ON E1.MGR = E2.EMPNO
+    ORDER BY E1.DEPTNO, MGR_EMPNO;
+    
+-- EMP 테이블에서 사원의 정보와 상사의 정보 출력하기
+-- (FULL OUTER JOIN 사용)
+SELECT E1.EMPNO, E1.ENAME, E1.MGR,
+        E2.EMPNO AS MGR_EMPNO,
+        E2.ENAME AS MGR_ENAME
+    FROM EMP E1 FULL OUTER JOIN EMP E2
+    ON E1.MGR = E2.EMPNO
+    ORDER BY E1.EMPNO, MGR_EMPNO;
+    
+
+--
+-- 3개 이상의 JOIN
+
+-- EMP 테이블에서 사원의 정보와 부서이름, 상사의 정보를 출력하기
+SELECT E1.EMPNO, E1.ENAME, E1.MGR, 
+        D.DNAME,
+        E2.EMPNO AS MGR_EMPNO,
+        E2.ENAME AS MGR_ENAME
+    FROM EMP E1 JOIN DEPT D ON E1.DEPTNO = D.DEPTNO
+            JOIN EMP E2 ON E1.MGR = E2.EMPNO;
+            
+
+-- [조건1] EMP 테이블과 DEPT 테이블의 조인 조건은 부서번호가 같은 때
+-- [조건2] 급여는 3000 이상이며 직속상관이 반드시 있어야 할것
+SELECT E.EMPNO, E.ENAME, E.JOB, E.MGR, E.HIREDATE, E.SAL, E.COMM,
+        DEPTNO, D.DNAME, D.LOC
+    FROM EMP E JOIN DEPT D USING(DEPTNO)
+    WHERE E.SAL >= 3000 AND E.MGR IS NOT NULL;
