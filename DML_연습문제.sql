@@ -14,7 +14,7 @@ CREATE  TABLE  CHAP10HW_DEPT
 CREATE  TABLE  CHAP10HW_SALGRADE
     AS  SELECT  *
           FROM  SALGRADE;
-          
+
 
 -- [1] CHAP10HW_DEPT 테이블에
 -- 50, 60, 70, 80번 부서를 등록하기
@@ -87,3 +87,60 @@ INSERT  INTO CHAP10HW_EMP(EMPNO, ENAME, JOB, MGR,
                    VALUES(7208, 'TEST_USER8', 'STUDENT', 7201,
                           TO_DATE('2018-03-09', 'YYYY-MM-DD'),
                           1200, NULL, 80);
+                          
+                          
+-- [3] CHAP10HW_EMP 에 속한 사원 중, 50번 부서에서 근무하는 사원들의
+-- 평균급여보다 많은 급여를 받고 있는 사원들을 70번 부서로 옮기기
+UPDATE CHAP10HW_EMP
+   SET DEPTNO = 70
+ WHERE SAL > (SELECT AVG(SAL)
+                FROM CHAP10HW_EMP
+               WHERE DEPTNO = 50);
+-- 검사
+SELECT *
+  FROM CHAP10HW_EMP
+ WHERE SAL > (SELECT AVG(SAL)
+                FROM CHAP10HW_EMP
+               WHERE DEPTNO = 50);
+-- 결과
+SELECT *
+  FROM CHAP10HW_EMP
+ ORDER BY DEPTNO;
+
+
+-- [4] CHAP10HW_EMP에 속한 사원 중, 60번 부서의 사원 중에 입사일이
+-- 가장 빠른 사원보다 늦게 입사한 사원의 급여를 10%인상하고
+-- 80번 부서로 옮기기
+UPDATE CHAP10HW_EMP
+   SET SAL = SAL * 1.1,
+       DEPTNO = 80
+ WHERE HIREDATE > (SELECT MIN(HIREDATE)
+                     FROM CHAP10HW_EMP
+                    WHERE DEPTNO = 60);
+-- 검사
+SELECT *
+  FROM CHAP10HW_EMP
+ WHERE HIREDATE > (SELECT MIN(HIREDATE)
+                     FROM CHAP10HW_EMP
+                    WHERE DEPTNO = 60);
+-- 결과
+SELECT *
+  FROM CHAP10HW_EMP;
+  
+  
+-- [5] CHAP10HW_EMP 테이블에서 급여등급이 5인 사원 삭제하기
+DELETE FROM CHAP10HW_EMP
+ WHERE EMPNO IN (SELECT EMPNO
+                  FROM CHAP10HW_EMP E, CHAP10HW_SALGRADE S
+                 WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL
+                   AND S.GRADE = 5);
+-- 검사
+SELECT *
+  FROM CHAP10HW_EMP
+ WHERE EMPNO IN (SELECT EMPNO
+                   FROM CHAP10HW_EMP E, CHAP10HW_SALGRADE S
+                  WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL
+                    AND S.GRADE = 5);
+-- 결과
+SELECT *
+  FROM CHAP10HW_EMP;
