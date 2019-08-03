@@ -1,0 +1,86 @@
+--
+-- 제약조건
+-- 제약조건이란, 테이블에 저장할 데이터를 제약하는 특수한 규칙을 말한다.
+-- 제약조건은 특정 열에 지정한다.
+
+
+-- NOT NULL
+-- 특정 열에 NULL값을 허용하지 않는 제약조건
+
+-- 테이블 생성 시, NOT NULL 설정하기
+CREATE TABLE TABLE_NOTNULL(
+    LOGIN_ID    VARCHAR2(20) NOT NULL,
+    LOGIN_PWD   VARCHAR2(20) NOT NULL,
+    TEL         VARCHAR2(20)
+);
+
+-- NOT NULL 제약조건인 열에 NULL 입력해 보기
+INSERT INTO TABLE_NOTNULL(LOGIN_ID, LOGIN_PWD, TEL)
+VALUES('TEST_ID_01', NULL, '010-1234-1234');
+-- 실행 오류 발생 (NOT NULL 제약조건에 위배됨)
+
+-- 제약조건이 없는 TEL열에만 NULL 입력하기
+INSERT INTO TABLE_NOTNULL(LOGIN_ID, LOGIN_PWD)
+VALUES('TEST_ID_01', '1234');
+
+SELECT *
+  FROM TABLE_NOTNULL;
+  
+-- NOT NULL 제약조건인 열의 값을 NULL로 수정해 보기
+UPDATE TABLE_NOTNULL
+   SET LOGIN_ID = NULL
+ WHERE LOGIN_ID = 'TEST_ID_01';
+-- NOT NULL 제약조건으로 인해, 수정 시에도 NULL값 저장 불가
+
+-- 설정된 제약조건 조회하기
+SELECT *
+  FROM USER_CONSTRAINTS;
+  
+  
+--
+-- CONSTRAINT
+-- 제약조건에 이름 지정하기
+CREATE TABLE TABLE_NOTNULL2(
+    LOGIN_ID        VARCHAR2(20) CONSTRAINT TBLNN2_LGNID_NN NOT NULL,
+    LOGIN_PWD       VARCHAR2(20) CONSTRAINT TBLNN2_LGNPW_NN NOT NULL,
+    TESL            VARCHAR2(20)
+);
+
+SELECT *
+  FROM USER_CONSTRAINTS;
+  
+--
+-- 이미 생성된 테이블의 제약조건 수정하기
+ALTER TABLE TABLE_NOTNULL
+    MODIFY (TEL NOT NULL);
+-- NOT NULL로 제약조건을 수정하려는 열에 이미 NULL값이 있기 때문에 오류 발생
+
+-- TEL열에 값 수정하기
+UPDATE TABLE_NOTNULL
+   SET TEL = '010-1234-5678'
+ WHERE LOGIN_ID = 'TEST_ID_01';
+ 
+-- TEL 열에 다시 NOT NULL 제약조건으로 수젖ㅇ하기
+ALTER TABLE TABLE_NOTNULL
+MODIFY (TEL NOT NULL);
+
+-- 생성된 제약조건 조회하기
+SELECT OWNER, CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_NAME
+  FROM USER_CONSTRAINTS;
+  
+-- 이미 생성된 테이블에 제약조건을 이름 지정하여 추가하기
+ALTER TABLE TABLE_NOTNULL2
+MODIFY(TEL CONSTRAINT TBLNN_TEL_NN NOT NULL);
+
+DESC TABLE_NOTNULL2;
+
+-- 이미 생성된 제약조건의 이름 변경하기
+ALTER TABLE TABLE_NOTNULL2
+RENAME CONSTRAINT TBLNN_TEL_NN TO TBLNN2_TEL_NN;
+
+-- 테이블에 설정한 제약조건을 제거하기
+ALTER TABLE TABLE_NOTNULL2
+DROP CONSTRAINT TBLNN2_TEL_NN;
+
+-- 제약조건 제거 확인하기
+DESC TABLE_NOTNULL2;
